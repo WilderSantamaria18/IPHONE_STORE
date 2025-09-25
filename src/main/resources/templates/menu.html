@@ -1,145 +1,327 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Menú Principal - IphoneStore</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/modern-styles.css}">
     <style>
         body {
-            /* Fondo Apple/iPhone con overlay oscuro para legibilidad */
-            background: linear-gradient(rgba(30,30,30,0.70), rgba(30,30,30,0.70)),
-                url('https://wallpapers.com/images/hd/apple-logo-in-3d-silver-design-i0fezrk90tf76l69.jpg');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
         .sidebar {
             min-height: 100vh;
-            background: rgba(30, 30, 30, 0.92);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-primary);
             padding-top: 2rem;
-            box-shadow: 2px 0 16px rgba(0,0,0,0.07);
-            backdrop-filter: blur(2px);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
         }
+        
+        [data-theme="dark"] .sidebar {
+            background: rgba(28, 28, 30, 0.95);
+            color: var(--dark-text);
+        }
+        
         .sidebar .navbar-brand {
             font-size: 1.7rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--text-primary);
             letter-spacing: 1px;
+            margin-bottom: 2rem;
         }
+        
         .sidebar .nav-link {
-            color: #e0e0e0;
+            color: var(--text-secondary);
             font-size: 1.08rem;
-            margin-bottom: 1rem;
-            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            border-radius: var(--radius-md);
             padding: 12px 18px;
-            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            text-decoration: none;
         }
-        .sidebar .nav-link.active, .sidebar .nav-link:hover {
-            background: rgba(255,255,255,0.10);
-            color: #fff;
-            box-shadow: 0 2px 8px 0 rgba(78,115,223,0.08);
+        
+        .sidebar .nav-link:hover {
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            transform: translateX(4px);
         }
+        
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
         .sidebar .nav-link i {
             margin-right: 10px;
+            width: 20px;
+            text-align: center;
         }
+        
         .brand-logo {
             width: 38px;
             margin-right: 12px;
-            filter: grayscale(1) brightness(1.2);
+            filter: brightness(1.2);
         }
+        
         .main-content {
-            padding: 2.5rem 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
         }
-        .card {
-            border-radius: 18px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+        
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
             border: none;
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
         }
-        .card-header {
-            background: transparent;
-            border-bottom: none;
-            color: #222;
+        
+        [data-theme="dark"] .dashboard-card {
+            background: rgba(44, 44, 46, 0.95);
         }
-        .alert-info {
-            background: rgba(78,115,223,0.07);
-            color: #222;
-            border: none;
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
-        @media (max-width: 991.98px) {
-            .sidebar {
-                min-height: auto;
-                padding-top: 1rem;
-            }
-            .main-content {
-                padding: 1.2rem 0.5rem;
-            }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-normal);
         }
-        @media (max-width: 767.98px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                min-height: auto;
-                flex-direction: row !important;
-                padding: 1rem 0.5rem;
-                overflow-x: auto;
-            }
-            .sidebar .navbar-brand {
-                margin-bottom: 0;
-                font-size: 1.2rem;
-            }
-            .sidebar .nav-link {
-                margin-bottom: 0.5rem;
-                font-size: 0.98rem;
-                padding: 8px 10px;
-            }
-            .main-content {
-                padding: 1rem 0.2rem;
-            }
+        
+        [data-theme="dark"] .stat-card {
+            background: var(--dark-surface);
+            border-color: var(--gray-700);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon.products { background: rgba(52, 199, 89, 0.1); color: var(--success-color); }
+        .stat-icon.clients { background: rgba(0, 122, 255, 0.1); color: var(--primary-color); }
+        .stat-icon.orders { background: rgba(255, 149, 0, 0.1); color: var(--warning-color); }
+        .stat-icon.sales { background: rgba(88, 86, 214, 0.1); color: var(--secondary-color); }
+        
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+            border-radius: var(--radius-xl);
+            margin-bottom: 2rem;
+        }
+        
+        [data-theme="dark"] .welcome-section {
+            background: linear-gradient(135deg, rgba(44,44,46,0.9), rgba(44,44,46,0.7));
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-normal);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .action-card {
+            background: var(--dark-surface);
+            border-color: var(--gray-700);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            color: var(--primary-color);
+        }
+        
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
         }
     </style>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" type="button" title="Cambiar tema">
+        <i class="bi bi-moon"></i>
+    </button>
+    
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column align-items-start">
-                <a class="navbar-brand d-flex align-items-center mb-4" href="#">
+            <!-- Enhanced Sidebar -->
+            <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column">
+                <a class="navbar-brand d-flex align-items-center fade-in" href="#" style="animation-delay: 0.1s">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
                     <span>IphoneStore</span>
                 </a>
-                <a th:href="@{/menu}" class="nav-link active"><i class="bi bi-house-door-fill"></i> Menú Principal</a>
-                <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')"><i class="bi bi-phone-fill"></i> Productos</a>
-                <a th:href="@{/Cliente/listar}" class="nav-link" sec:authorize="hasAuthority('CLIENTE_READ')"><i class="bi bi-people-fill"></i> Clientes</a>
-                <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')"><i class="bi bi-truck"></i> Proveedores</a>
-                <a th:href="@{/pedidos/listar}" class="nav-link" sec:authorize="hasAuthority('PEDIDO_READ')"><i class="bi bi-bag-check-fill"></i> Pedidos</a>
-                <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')"><i class="bi bi-receipt-cutoff"></i> Comprobantes</a>
-                <a th:href="@{/usuarios/listar}" class="nav-link" sec:authorize="hasAuthority('USUARIO_READ')"><i class="bi bi-person-gear"></i> Usuarios</a>
-                <a th:href="@{/login}" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
-                <div class="mt-auto w-100 text-center text-muted small pt-5">
-                    © 2025 IphoneStore. Todos los derechos reservados.
+                
+                <div class="nav flex-column stagger-fade">
+                    <a th:href="@{/menu}" class="nav-link active">
+                        <i class="bi bi-house-door-fill"></i> Menú Principal
+                    </a>
+                    <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')">
+                        <i class="bi bi-phone-fill"></i> Productos
+                    </a>
+                    <a th:href="@{/Cliente/listar}" class="nav-link" sec:authorize="hasAuthority('CLIENTE_READ')">
+                        <i class="bi bi-people-fill"></i> Clientes
+                    </a>
+                    <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')">
+                        <i class="bi bi-truck"></i> Proveedores
+                    </a>
+                    <a th:href="@{/pedidos/listar}" class="nav-link" sec:authorize="hasAuthority('PEDIDO_READ')">
+                        <i class="bi bi-bag-check-fill"></i> Pedidos
+                    </a>
+                    <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')">
+                        <i class="bi bi-receipt-cutoff"></i> Comprobantes
+                    </a>
+                    <a th:href="@{/usuarios/listar}" class="nav-link" sec:authorize="hasAuthority('USUARIO_READ')">
+                        <i class="bi bi-person-gear"></i> Usuarios
+                    </a>
+                </div>
+                
+                <div class="mt-auto">
+                    <a th:href="@{/login}" class="nav-link text-danger">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                    </a>
+                    <div class="text-center text-muted small pt-2">
+                        © 2025 IphoneStore
+                    </div>
                 </div>
             </nav>
-            <!-- Main Content -->
+            
+            <!-- Enhanced Main Content -->
             <main class="col-lg-9 col-md-8 main-content">
-                <div class="card shadow">
-                    <div class="card-header text-center">
-                        <h3 class="mb-0"><i class="bi bi-house-door-fill"></i> Menú Principal</h3>
+                <!-- Welcome Section -->
+                <div class="welcome-section fade-in">
+                    <h1 class="display-5 fw-bold mb-3">¡Bienvenido a IphoneStore!</h1>
+                    <p class="lead mb-4">Sistema de gestión integral para tu tienda de iPhones</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <span class="badge bg-primary fs-6">Sistema Activo</span>
+                        <span class="badge bg-success fs-6">Base de Datos Conectada</span>
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-info text-center" role="alert">
-                            ¡Bienvenido al sistema de IphoneStore!
+                </div>
+
+                <!-- Dashboard Stats -->
+                <div class="dashboard-stats slide-up">
+                    <div class="stat-card">
+                        <div class="stat-icon products">
+                            <i class="bi bi-phone-fill"></i>
                         </div>
-                        <!-- Aquí puedes agregar contenido dinámico o dashboard -->
+                        <h3 class="h4 mb-1">156</h3>
+                        <p class="text-muted mb-0">Productos en Stock</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon clients">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h3 class="h4 mb-1">89</h3>
+                        <p class="text-muted mb-0">Clientes Activos</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orders">
+                            <i class="bi bi-bag-check-fill"></i>
+                        </div>
+                        <h3 class="h4 mb-1">23</h3>
+                        <p class="text-muted mb-0">Pedidos Pendientes</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon sales">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h3 class="h4 mb-1">$45,230</h3>
+                        <p class="text-muted mb-0">Ventas este Mes</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card slide-up" style="animation-delay: 0.2s">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">
+                            <i class="bi bi-lightning-charge text-primary"></i>
+                            Acciones Rápidas
+                        </h4>
+                        
+                        <div class="quick-actions">
+                            <a th:href="@{/productos/crear}" class="action-card" sec:authorize="hasAuthority('PRODUCTO_CREATE')">
+                                <div class="action-icon">
+                                    <i class="bi bi-plus-circle"></i>
+                                </div>
+                                <h5>Agregar Producto</h5>
+                                <p class="text-muted">Añadir nuevo iPhone al inventario</p>
+                            </a>
+                            
+                            <a th:href="@{/Cliente/crear}" class="action-card" sec:authorize="hasAuthority('CLIENTE_CREATE')">
+                                <div class="action-icon">
+                                    <i class="bi bi-person-plus"></i>
+                                </div>
+                                <h5>Nuevo Cliente</h5>
+                                <p class="text-muted">Registrar cliente en el sistema</p>
+                            </a>
+                            
+                            <a th:href="@{/pedidos/crear}" class="action-card" sec:authorize="hasAuthority('PEDIDO_CREATE')">
+                                <div class="action-icon">
+                                    <i class="bi bi-cart-plus"></i>
+                                </div>
+                                <h5>Crear Pedido</h5>
+                                <p class="text-muted">Generar nueva orden de compra</p>
+                            </a>
+                            
+                            <a th:href="@{/comprobantes/crear}" class="action-card" sec:authorize="hasAuthority('COMPROBANTE_CREATE')">
+                                <div class="action-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+                                <h5>Generar Comprobante</h5>
+                                <p class="text-muted">Crear factura o boleta</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </main>
         </div>
     </div>
+    
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/app.js}"></script>
 </body>
 </html>
