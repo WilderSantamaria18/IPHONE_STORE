@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nuevo Cliente - IphoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(30,30,30,0.70), rgba(30,30,30,0.70)),
+                url('https://wallpapers.com/images/hd/apple-logo-in-3d-silver-design-i0fezrk90tf76l69.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: rgba(30, 30, 30, 0.92);
+            color: #fff;
+            padding-top: 2rem;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar .navbar-brand {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .sidebar .nav-link {
+            color: #e0e0e0;
+            font-size: 1.08rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            padding: 12px 18px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(78,115,223,0.08);
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .brand-logo {
+            width: 38px;
+            margin-right: 12px;
+            filter: grayscale(1) brightness(1.2);
+        }
+        .main-content {
+            padding: 2.5rem 2rem;
+        }
+        .register-container {
+            max-width: 950px;
+            margin: 2.5rem 0 0 0;
+        }
+        .card {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            border: none;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(2px);
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        @media (max-width: 991.98px) {
+            .main-content {
+                padding: 1.2rem 0.5rem;
+            }
+            .form-container {
+                max-width: 100%;
+                margin: 1.5rem 0 0 0;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .main-content {
+                padding: 1rem 0.2rem;
+            }
+            .form-container {
+                margin: 1rem 0 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column align-items-start">
+                <a class="navbar-brand d-flex align-items-center mb-4" href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
+                    <span>IphoneStore</span>
+                </a>
+                <a th:href="@{/menu}" class="nav-link"><i class="bi bi-house-door-fill"></i> Menú Principal</a>
+                <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')"><i class="bi bi-phone-fill"></i> Productos</a>
+                <a th:href="@{/Cliente/listar}" class="nav-link active" sec:authorize="hasAuthority('CLIENTE_READ')"><i class="bi bi-people-fill"></i> Clientes</a>
+                <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')"><i class="bi bi-truck"></i> Proveedores</a>
+                <a th:href="@{/pedidos/listar}" class="nav-link" sec:authorize="hasAuthority('PEDIDO_READ')"><i class="bi bi-bag-check-fill"></i> Pedidos</a>
+                <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')"><i class="bi bi-receipt-cutoff"></i> Comprobantes</a>
+                <a th:href="@{/usuarios/listar}" class="nav-link" sec:authorize="hasAuthority('USUARIO_READ')"><i class="bi bi-person-gear"></i> Usuarios</a>
+                <a th:href="@{/login}" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+                <div class="mt-auto w-100 text-center text-muted small pt-5">
+                    © 2025 IphoneStore. Todos los derechos reservados.
+                </div>
+            </nav>
+            <!-- Main Content -->
+            <main class="col-lg-9 col-md-8 main-content">
+                <div class="form-container mx-auto">
+                    <!-- Título grande de fondo -->
+                    <h2 class="mb-4" style="color: #222; opacity: 0.85;">
+                        <i class="bi bi-person-plus text"></i>
+                        Registrar Nuevo Cliente
+                    </h2>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <form th:action="@{/Cliente/guardar}" th:object="${cliente}" method="post" autocomplete="off">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tipo de Cliente</label>
+                                        <select class="form-select" th:field="*{tipoCliente}" required>
+                                            <option value="">Seleccione el tipo de cliente</option>
+                                            <option value="Natural">Natural</option>
+                                            <option value="Juridica">Jurídica</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" th:field="*{nombre}" required maxlength="100">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Documento</label>
+                                        <input type="text" class="form-control" th:field="*{documento}" required maxlength="15">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Dirección</label>
+                                        <input type="text" class="form-control" th:field="*{direccion}" required maxlength="150">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="text" class="form-control" th:field="*{telefono}" required maxlength="15">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" th:field="*{email}" required maxlength="100">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <a th:href="@{/Cliente/listar}" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-person-plus"></i> Crear Cliente
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

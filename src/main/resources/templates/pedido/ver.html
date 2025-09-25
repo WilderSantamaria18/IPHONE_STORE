@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ver Pedido - IphoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(30,30,30,0.70), rgba(30,30,30,0.70)), 
+                url('https://wallpapers.com/images/hd/apple-logo-in-3d-silver-design-i0fezrk90tf76l69.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: rgba(30, 30, 30, 0.92);
+            color: #fff;
+            padding-top: 2rem;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar .navbar-brand {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+        .sidebar .nav-link {
+            color: #e0e0e0;
+            font-size: 1.08rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            padding: 12px 18px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(78,115,223,0.08);
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .brand-logo {
+            width: 38px;
+            margin-right: 12px;
+            filter: grayscale(1) brightness(1.2);
+        }
+        .main-content {
+            padding: 2.5rem 2rem;
+        }
+        .card {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            border: none;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(2px);
+        }
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid rgba(0,0,0,0.125);
+            color: #222;
+            border-radius: 18px 18px 0 0 !important;
+        }
+        h2.page-title {
+            color: #222;
+            opacity: 0.90;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            margin-bottom: 1.5rem;
+        }
+        .alert-success {
+            background: rgba(25,135,84,0.15);
+            color: #157347;
+            border: none;
+            border-radius: 12px;
+        }
+        .alert-danger {
+            background: rgba(220,53,69,0.15);
+            color: #842029;
+            border: none;
+            border-radius: 12px;
+        }
+        .badge-tipo-pago {
+            font-size: 0.85rem;
+            padding: 0.4em 0.7em;
+        }
+        .badge-efectivo {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        .badge-tarjeta {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+        .badge-transferencia {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+        .badge-yape, .badge-plin {
+            background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+            color: white;
+        }
+        .info-item {
+            margin-bottom: 1rem;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        .info-value {
+            font-size: 1rem;
+            color: #212529;
+        }
+        .total-destacado {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .table {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .table thead th {
+            background: rgba(248,249,250,0.9);
+            border-top: none;
+            font-weight: 600;
+        }
+        .producto-info {
+            display: flex;
+            align-items: center;
+        }
+        .producto-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        .btn-accion {
+            margin: 0 2px;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        @media (max-width: 991.98px) {
+            .main-content {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+                flex-direction: row !important;
+                padding: 1rem 0.5rem;
+                overflow-x: auto;
+            }
+            .sidebar .navbar-brand {
+                margin-bottom: 0;
+                font-size: 1.2rem;
+            }
+            .sidebar .nav-link {
+                margin-bottom: 0.5rem;
+                font-size: 0.98rem;
+                padding: 8px 10px;
+            }
+            .main-content {
+                padding: 1rem 0.7rem;
+            }
+            h2.page-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column align-items-start">
+                <a class="navbar-brand d-flex align-items-center mb-4" href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
+                    <span>IphoneStore</span>
+                </a>
+                <a th:href="@{/menu}" class="nav-link"><i class="bi bi-house-door-fill"></i> Menú Principal</a>
+                <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')"><i class="bi bi-phone-fill"></i> Productos</a>
+                <a th:href="@{/Cliente/listar}" class="nav-link" sec:authorize="hasAuthority('CLIENTE_READ')"><i class="bi bi-people-fill"></i> Clientes</a>
+                <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')"><i class="bi bi-truck"></i> Proveedores</a>
+                <a th:href="@{/pedidos/listar}" class="nav-link active" sec:authorize="hasAuthority('PEDIDO_READ')"><i class="bi bi-bag-check-fill"></i> Pedidos</a>
+                <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')"><i class="bi bi-receipt-cutoff"></i> Comprobantes</a>
+                <a th:href="@{/usuarios/listar}" class="nav-link" sec:authorize="hasAuthority('USUARIO_READ')"><i class="bi bi-person-gear"></i> Usuarios</a>
+                <a th:href="@{/login}" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+                <div class="mt-auto w-100 text-center text-muted small pt-5">
+                    © 2025 IphoneStore. Todos los derechos reservados.
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-lg-9 col-md-8 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="page-title mb-0">
+                        <i class="bi bi-eye-fill"></i>
+                        Detalles del Pedido
+
+                    </h2>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/pedidos/listar}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver a Lista
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Alertas -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span>Pedido registrado exitosamente</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Información del Pedido -->
+                <div class="row mb-4">
+                    <!-- Datos Básicos -->
+                    <div class="col-md-8">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-info-circle text-primary"></i>
+                                    Información del Pedido
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-item">
+                                            <div class="info-label">ID Pedido:</div>
+                                            <div class="info-value">
+                                                <span class="badge bg-primary fs-6" th:text="'P-' + ${pedido.idPedido}">P-001</span>
+                                            </div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="bi bi-calendar3 text-primary me-1"></i>
+                                                Fecha de Pedido:
+                                            </div>
+                                            <div class="info-value" th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:30</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="bi bi-truck text-success me-1"></i>
+                                                Fecha de Entrega:
+                                            </div>
+                                            <div class="info-value" th:text="${#temporals.format(pedido.fechaEntrega, 'dd/MM/yyyy')}">02/01/2024</div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-label">
+                                                <i class="bi bi-credit-card text-info me-1"></i>
+                                                Tipo de Pago:
+                                            </div>
+                                            <div class="info-value">
+                                                <span class="badge badge-tipo-pago"
+                                                      th:classappend="${pedido.tipoPago == 'Efectivo'} ? 'badge-efectivo' : 
+                                                                     (${pedido.tipoPago == 'Tarjeta'} ? 'badge-tarjeta' : 
+                                                                     (${pedido.tipoPago == 'Transferencia'} ? 'badge-transferencia' : 'badge-yape'))"
+                                                      th:text="${pedido.tipoPago}">
+                                                    Efectivo
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Total -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body d-flex align-items-center justify-content-center">
+                                <div class="total-destacado w-100">
+                                    <h6 class="mb-2">Total del Pedido</h6>
+                                    <h2 class="mb-0 fw-bold" th:text="'S/ ' + ${#numbers.formatDecimal(pedido.totalPagar, 1, 2)}">S/ 0.00</h2>
+                                    <small class="opacity-75">IVA incluido</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cliente y Usuario -->
+                <div class="row mb-4">
+                    <!-- Cliente -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-person text-primary"></i>
+                                    Información del Cliente
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-primary rounded-circle p-2 me-3">
+                                        <i class="bi bi-person text-white fs-6"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1" th:text="${pedido.cliente?.nombre}">Nombre del Cliente</h6>
+                                        <small class="text-muted" th:text="${pedido.cliente?.tipoCliente}">Tipo</small>
+                                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="info-label">Documento:</div>
+                                        <div class="info-value" th:text="${pedido.cliente?.documento}">12345678</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-label">Teléfono:</div>
+                                        <div class="info-value" th:text="${pedido.cliente?.telefono}">987654321</div>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <div class="info-label">Email:</div>
+                                        <div class="info-value" th:text="${pedido.cliente?.email}">cliente@email.com</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="info-label">Dirección:</div>
+                                        <div class="info-value" th:text="${pedido.cliente?.direccion}">Dirección del cliente</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Usuario -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-person-badge text-info"></i>
+                                    Usuario Responsable
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-info rounded-circle p-2 me-3">
+                                        <i class="bi bi-person-badge text-white fs-6"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1" th:text="${pedido.usuario?.nombres}">Nombre del Usuario</h6>
+                                        <small class="text-muted" th:text="${pedido.usuario?.cargo?.nombre}">Cargo</small>
+                                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="info-label">DNI:</div>
+                                        <div class="info-value" th:text="${pedido.usuario?.dni}">87654321</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-label">Username:</div>
+                                        <div class="info-value" th:text="${pedido.usuario?.username}">usuario123</div>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <div class="info-label">Email:</div>
+                                        <div class="info-value" th:text="${pedido.usuario?.email}">usuario@empresa.com</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productos del Pedido -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-box-seam text-success"></i>
+                            Productos del Pedido
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${detalles == null or #lists.isEmpty(detalles)}" class="text-center py-5">
+                            <i class="bi bi-inbox display-1 text-muted opacity-25"></i>
+                            <h5 class="text-muted mt-3">No hay productos en este pedido</h5>
+                            <p class="text-muted">Los productos aparecerán aquí cuando se agreguen al pedido</p>
+                        </div>
+                        <div th:if="${detalles != null and !#lists.isEmpty(detalles)}" class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Especificaciones</th>
+                                        <th>Precio Unit.</th>
+                                        <th>Cantidad</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="detalle : ${detalles}">
+                                        <td>
+                                            <div class="producto-info">
+                                                <div class="producto-icon">
+                                                    <i class="bi bi-phone text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-medium" th:text="${detalle.producto?.modelo}">iPhone 15 Pro</div>
+                                                    <small class="text-muted" th:text="${detalle.producto?.proveedor?.nombre}">Apple</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">
+                                                <i class="bi bi-cpu me-1"></i><span th:text="${detalle.producto?.procesador}">A17 Pro</span><br>
+                                                <i class="bi bi-memory me-1"></i><span th:text="${detalle.producto?.ram}">8GB</span><br>
+                                                <i class="bi bi-device-hdd me-1"></i><span th:text="${detalle.producto?.almacenamiento}">256GB</span>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="fw-medium text-success" th:text="'S/ ' + ${#numbers.formatDecimal(detalle.precioUnitario, 1, 2)}">S/ 0.00</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary fs-6" th:text="${detalle.cantidad}">1</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success" th:text="'S/ ' + ${#numbers.formatDecimal(detalle.precioUnitario * detalle.cantidad, 1, 2)}">S/ 0.00</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <td colspan="4" class="text-end fw-bold fs-5">TOTAL:</td>
+                                        <td class="fw-bold text-success fs-4" th:text="'S/ ' + ${#numbers.formatDecimal(pedido.totalPagar, 1, 2)}">S/ 0.00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-gear text-warning"></i>
+                            Acciones Disponibles
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <a th:href="@{/comprobantes/generar/{id}(id=${pedido.idPedido})}" 
+                                   class="btn btn-success w-100 btn-accion"
+                                   sec:authorize="hasAuthority('COMPROBANTE_CREATE')">
+                                    <i class="bi bi-receipt"></i>
+                                    Generar Comprobante
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Info para usuarios de solo lectura -->
+                        <div class="mt-3 text-center" sec:authorize="hasAuthority('PEDIDO_READ') and !hasAuthority('PEDIDO_UPDATE')">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Está visualizando en modo consulta. Contacte al administrador para realizar modificaciones.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Eliminación -->
+                <div class="modal fade" id="deleteModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-exclamation-triangle text-danger"></i>
+                                    Confirmar Eliminación
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Está seguro que desea eliminar el pedido <strong th:text="'P-' + ${pedido.idPedido}">P-001</strong>?</p>
+                                <div class="alert alert-warning">
+                                    <h6><i class="bi bi-exclamation-triangle"></i> Esta acción es irreversible</h6>
+                                    <ul class="mb-0">
+                                        <li>Se eliminarán todos los detalles del pedido</li>
+                                        <li>Se perderá el historial completo</li>
+                                        <li>No se podrán generar comprobantes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </button>
+                                <form th:action="@{/pedidos/eliminar/{id}(id=${pedido.idPedido})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="bi bi-trash"></i> Confirmar Eliminación
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

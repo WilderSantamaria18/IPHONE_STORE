@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pedido - iPhone Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <style>
+        body {
+            /* Fondo Apple/iPhone con overlay oscuro para legibilidad */
+            background: linear-gradient(rgba(30,30,30,0.70), rgba(30,30,30,0.70)),
+                url('https://wallpapers.com/images/hd/apple-logo-in-3d-silver-design-i0fezrk90tf76l69.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: rgba(30, 30, 30, 0.92);
+            color: #fff;
+            padding-top: 2rem;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar .navbar-brand {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .sidebar .nav-link {
+            color: #e0e0e0;
+            font-size: 1.08rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            padding: 12px 18px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(78,115,223,0.08);
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .brand-logo {
+            width: 38px;
+            margin-right: 12px;
+            filter: grayscale(1) brightness(1.2);
+        }
+        .main-content {
+            padding: 2.5rem 2rem;
+        }
+        .card {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            border: none;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(2px);
+        }
+        .card-header {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px 18px 0 0 !important;
+            color: #222;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #007AFF, #5856D6);
+            border: none;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+        }
+        .btn-success {
+            background: linear-gradient(45deg, #34C759, #30D158);
+            border: none;
+            border-radius: 12px;
+        }
+        .btn-danger {
+            background: linear-gradient(45deg, #FF3B30, #FF453A);
+            border: none;
+            border-radius: 12px;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+        }
+        .btn-info {
+            background: linear-gradient(45deg, #007AFF, #5AC8FA);
+            border: none;
+            border-radius: 12px;
+        }
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #007AFF;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        .table {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .table th {
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            color: white;
+            font-weight: 600;
+        }
+        .table td {
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .alert {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #222;
+        }
+        .page-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                min-height: auto;
+                padding-top: 1rem;
+            }
+            .main-content {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+                flex-direction: row !important;
+                padding: 1rem 0.5rem;
+                overflow-x: auto;
+            }
+            .sidebar .navbar-brand {
+                margin-bottom: 0;
+                font-size: 1.2rem;
+            }
+            .sidebar .nav-link {
+                margin-bottom: 0.5rem;
+                font-size: 0.98rem;
+                padding: 8px 10px;
+            }
+            .main-content {
+                padding: 1rem 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column align-items-start">
+                <a class="navbar-brand d-flex align-items-center mb-4" href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
+                    <span>IphoneStore</span>
+                </a>
+                <a th:href="@{/menu}" class="nav-link active"><i class="bi bi-house-door-fill"></i> Menú Principal</a>
+                <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')"><i class="bi bi-phone-fill"></i> Productos</a>
+                <a th:href="@{/Cliente/listar}" class="nav-link" sec:authorize="hasAuthority('CLIENTE_READ')"><i class="bi bi-people-fill"></i> Clientes</a>
+                <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')"><i class="bi bi-truck"></i> Proveedores</a>
+                <a th:href="@{/pedidos/listar}" class="nav-link" sec:authorize="hasAuthority('PEDIDO_READ')"><i class="bi bi-bag-check-fill"></i> Pedidos</a>
+                <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')"><i class="bi bi-receipt-cutoff"></i> Comprobantes</a>
+                <a th:href="@{/usuarios/listar}" class="nav-link" sec:authorize="hasAuthority('USUARIO_READ')"><i class="bi bi-person-gear"></i> Usuarios</a>
+                <a th:href="@{/login}" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+                <div class="mt-auto w-100 text-center text-muted small pt-5">
+                    © 2025 IphoneStore. Todos los derechos reservados.
+                </div>
+            </nav>
+            
+            <!-- Main Content -->
+            <main class="col-lg-9 col-md-8 main-content">
+                <!-- Header con botón de regreso -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="page-title"><i class="fas fa-edit"></i> Editar Pedido</h1>
+                    <div>
+                        <a th:href="@{/comprobantes/detalle/{id}(id=${pedido.idPedido})}" class="btn btn-info me-2">
+                            <i class="fas fa-receipt"></i> Ver Comprobante
+                        </a>
+                        <a th:href="@{/pedidos/listar}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver al Listado
+                        </a>
+                    </div>
+                </div>
+
+        <!-- Mensajes de alerta -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-triangle"></i> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Formulario principal -->
+        <form th:action="@{/pedidos/editar/{id}(id=${pedido.idPedido})}" th:object="${pedido}" method="post" id="pedidoForm">
+            <div class="row">
+                <!-- Información básica del pedido -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Información del Pedido</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- ID del Pedido (solo lectura) -->
+                            <div class="mb-3">
+                                <label class="form-label">ID del Pedido</label>
+                                <input type="text" class="form-control" th:value="${'P-' + pedido.idPedido}" readonly>
+                            </div>
+
+                            <!-- Fecha del pedido (solo lectura) -->
+                            <div class="mb-3">
+                                <label class="form-label">Fecha del Pedido</label>
+                                <input type="text" class="form-control" 
+                                       th:value="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}" readonly>
+                            </div>
+
+                            <!-- Fecha de entrega -->
+                            <div class="mb-3">
+                                <label for="fechaEntrega" class="form-label">Fecha de Entrega *</label>
+                                <input type="date" 
+                                       th:field="*{fechaEntrega}" 
+                                       class="form-control" 
+                                       id="fechaEntrega" 
+                                       required>
+                            </div>
+
+                            <!-- Tipo de pago -->
+                            <div class="mb-3">
+                                <label for="tipoPago" class="form-label">Tipo de Pago *</label>
+                                <select th:field="*{tipoPago}" class="form-select" id="tipoPago" required>
+                                    <option value="">Seleccionar tipo de pago</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                                    <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                                    <option value="Transferencia">Transferencia Bancaria</option>
+                                    <option value="Yape">Yape</option>
+                                    <option value="Plin">Plin</option>
+                                </select>
+                            </div>
+
+                            <!-- Cliente -->
+                            <div class="mb-3">
+                                <label for="clienteId" class="form-label">Cliente *</label>
+                                <select name="cliente.idCliente" class="form-select" id="clienteId" required>
+                                    <option value="">Seleccionar cliente</option>
+                                    <option th:each="cliente : ${clientes}" 
+                                            th:value="${cliente.idCliente}" 
+                                            th:text="${cliente.nombre + ' - ' + cliente.documento}"
+                                            th:selected="${cliente.idCliente == pedido.cliente.idCliente}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Usuario -->
+                            <div class="mb-3">
+                                <label for="usuarioId" class="form-label">Usuario *</label>
+                                <select name="usuario.idUsuario" class="form-select" id="usuarioId" required>
+                                    <option value="">Seleccionar usuario</option>
+                                    <option th:each="usuario : ${usuarios}" 
+                                            th:value="${usuario.idUsuario}" 
+                                            th:text="${usuario.nombres}"
+                                            th:selected="${usuario.idUsuario == pedido.usuario.idUsuario}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Total actual (calculado dinámicamente) -->
+                            <div class="mb-3">
+                                <label class="form-label">Total del Pedido</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">S/.</span>
+                                    <input type="text" class="form-control fw-bold text-success" 
+                                           id="totalPedido" readonly value="0.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestión de productos -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-box"></i> Productos del Pedido</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Agregar nuevo producto -->
+                            <div class="mb-3">
+                                <label for="nuevoProducto" class="form-label">Agregar Producto</label>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <select class="form-select" id="nuevoProducto">
+                                            <option value="">Seleccionar producto</option>
+                                            <option th:each="producto : ${productos}" 
+                                                    th:value="${producto.idProducto}" 
+                                                    th:text="${producto.modelo + ' - S/.' + producto.precioVenta}"
+                                                    th:data-precio="${producto.precioVenta}"
+                                                    th:data-stock="${producto.stock}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" id="nuevaCantidad" 
+                                               placeholder="Cantidad" min="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-success w-100" onclick="agregarProducto()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lista de productos actuales -->
+                            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                <table class="table table-sm">
+                                    <thead class="sticky-top">
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Cant.</th>
+                                            <th>Precio</th>
+                                            <th>Subtotal</th>
+                                            <th>Acc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productosTableBody">
+                                        <!-- Productos existentes -->
+                                        <tr th:each="detalle, iterStat : ${detalles}" 
+                                            th:data-detalle-id="${detalle.idDetalle}">
+                                            <td>
+                                                <small th:text="${detalle.producto.modelo}"></small>
+                                                <input type="hidden" 
+                                                       th:name="'productos[' + ${iterStat.index} + ']'"
+                                                       th:value="${detalle.producto.idProducto}">
+                                                <input type="hidden" 
+                                                       th:name="'detallesExistentes[' + ${iterStat.index} + ']'"
+                                                       th:value="${detalle.idDetalle}">
+                                            </td>
+                                            <td>
+                                                <input type="number" 
+                                                       th:name="'cantidades[' + ${iterStat.index} + ']'"
+                                                       th:value="${detalle.cantidad}"
+                                                       class="form-control form-control-sm cantidad-input"
+                                                       min="1" style="width: 60px;" onchange="actualizarSubtotal(this)">
+                                            </td>
+                                            <td>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text" style="font-size: 0.75rem;">S/.</span>
+                                                    <input type="number" 
+                                                           th:name="'precios[' + ${iterStat.index} + ']'"
+                                                           th:value="${detalle.precioUnitario}"
+                                                           class="form-control precio-input"
+                                                           step="0.01" min="0.01" style="width: 70px;" 
+                                                           onchange="actualizarSubtotal(this)">
+                                                </div>
+                                            </td>
+                                            <td class="subtotal-cell">
+                                                <small>S/. <span th:text="${#numbers.formatDecimal(detalle.cantidad * detalle.precioUnitario, 1, 2)}"></span></small>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm" 
+                                                        onclick="eliminarFila(this)" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Total calculado -->
+                            <div class="text-end mt-3">
+                                <h6 style="color: #222;">Total: S/. <span id="totalCalculado" class="text-success">0.00</span></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-save"></i> Actualizar Pedido
+                </button>
+                <a th:href="@{/pedidos/listar}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let contadorProductos = /*[[${#lists.size(detalles)}]]*/ 0;
+
+        function agregarProducto() {
+            const selectProducto = document.getElementById('nuevoProducto');
+            const inputCantidad = document.getElementById('nuevaCantidad');
+            
+            if (selectProducto.value === '' || inputCantidad.value === '' || inputCantidad.value <= 0) {
+                alert('Por favor seleccione un producto y especifique una cantidad válida');
+                return;
+            }
+
+            const productoId = selectProducto.value;
+            const productoTexto = selectProducto.options[selectProducto.selectedIndex].text;
+            const cantidad = parseInt(inputCantidad.value);
+            const precio = parseFloat(selectProducto.options[selectProducto.selectedIndex].dataset.precio);
+            const stock = parseInt(selectProducto.options[selectProducto.selectedIndex].dataset.stock);
+
+            // Verificar stock disponible
+            if (cantidad > stock) {
+                alert(`Stock insuficiente. Stock disponible: ${stock}`);
+                return;
+            }
+
+            // Verificar si el producto ya está en la lista
+            const filas = document.querySelectorAll('#productosTableBody tr');
+            for (let fila of filas) {
+                const productoInput = fila.querySelector('input[name^="productos"]');
+                if (productoInput && productoInput.value === productoId) {
+                    alert('Este producto ya está en la lista. Modifique la cantidad en la fila existente.');
+                    return;
+                }
+            }
+
+            const subtotal = cantidad * precio;
+            
+            // Obtener el próximo índice basado en las filas existentes
+            const proximoIndice = filas.length;
+            
+            const nuevaFila = `
+                <tr>
+                    <td>
+                        <small>${productoTexto.split(' - ')[0]}</small>
+                        <input type="hidden" name="productos[${proximoIndice}]" value="${productoId}">
+                    </td>
+                    <td>
+                        <input type="number" name="cantidades[${proximoIndice}]" value="${cantidad}" 
+                               class="form-control form-control-sm cantidad-input" min="1" style="width: 60px;" onchange="actualizarSubtotal(this)">
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text" style="font-size: 0.75rem;">S/.</span>
+                            <input type="number" name="precios[${proximoIndice}]" value="${precio.toFixed(2)}" 
+                                   class="form-control precio-input" step="0.01" min="0.01" style="width: 70px;" onchange="actualizarSubtotal(this)">
+                        </div>
+                    </td>
+                    <td class="subtotal-cell"><small>S/. <span>${subtotal.toFixed(2)}</span></small></td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            
+            document.getElementById('productosTableBody').insertAdjacentHTML('beforeend', nuevaFila);
+            
+            // Limpiar campos
+            selectProducto.value = '';
+            inputCantidad.value = '';
+            
+            // Actualizar índices después de agregar
+            actualizarIndices();
+            calcularTotal();
+        }
+
+        function eliminarFila(boton) {
+            if (confirm('¿Está seguro de eliminar este producto del pedido?')) {
+                boton.closest('tr').remove();
+                // Actualizar índices después de eliminar
+                actualizarIndices();
+                calcularTotal();
+            }
+        }
+
+        function actualizarIndices() {
+            const filas = document.querySelectorAll('#productosTableBody tr');
+            filas.forEach((fila, indice) => {
+                // Actualizar nombres de inputs hidden y visibles
+                const inputProducto = fila.querySelector('input[name^="productos["]');
+                const inputCantidad = fila.querySelector('input[name^="cantidades["]');
+                const inputPrecio = fila.querySelector('input[name^="precios["]');
+                const inputDetalleExistente = fila.querySelector('input[name^="detallesExistentes["]');
+                
+                if (inputProducto) {
+                    inputProducto.name = `productos[${indice}]`;
+                }
+                if (inputCantidad) {
+                    inputCantidad.name = `cantidades[${indice}]`;
+                }
+                if (inputPrecio) {
+                    inputPrecio.name = `precios[${indice}]`;
+                }
+                if (inputDetalleExistente) {
+                    inputDetalleExistente.name = `detallesExistentes[${indice}]`;
+                }
+            });
+        }
+
+        function actualizarSubtotal(input) {
+            const fila = input.closest('tr');
+            const cantidad = parseFloat(fila.querySelector('.cantidad-input').value) || 0;
+            const precio = parseFloat(fila.querySelector('.precio-input').value) || 0;
+            const subtotal = cantidad * precio;
+            
+            fila.querySelector('.subtotal-cell span').textContent = subtotal.toFixed(2);
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let total = 0;
+            document.querySelectorAll('.subtotal-cell span').forEach(span => {
+                total += parseFloat(span.textContent) || 0;
+            });
+            
+            document.getElementById('totalCalculado').textContent = total.toFixed(2);
+            
+            // Actualizar el campo hidden del total si existe
+            const totalInput = document.getElementById('totalPedido');
+            if (totalInput) {
+                totalInput.value = total.toFixed(2);
+            }
+        }
+
+        // Calcular total inicial y actualizar índices
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarIndices(); // Asegurar que los índices estén correctos al cargar
+            calcularTotal();
+            
+            // Establecer fecha mínima (hoy)
+            const fechaEntregaInput = document.getElementById('fechaEntrega');
+            if (fechaEntregaInput) {
+                var today = new Date().toISOString().split('T')[0];
+                fechaEntregaInput.setAttribute('min', today);
+            }
+        });
+
+        // Validación del formulario
+        document.getElementById('pedidoForm').addEventListener('submit', function(e) {
+            const filas = document.querySelectorAll('#productosTableBody tr');
+            if (filas.length === 0) {
+                e.preventDefault();
+                alert('Debe agregar al menos un producto al pedido');
+                return false;
+            }
+            
+            // Confirmar antes de enviar
+            if (!confirm('¿Está seguro de actualizar este pedido con los cambios realizados?')) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Actualizar índices una última vez antes del envío
+            actualizarIndices();
+        });
+        /*]]>*/
+    </script>
+</body>
+</html>
