@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Frontend Improvements Demo - IphoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="modern-styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(10px);
+        }
+        
+        [data-theme="dark"] .demo-section {
+            background: rgba(44, 44, 46, 0.95);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all var(--transition-normal);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .demo-table {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .color-swatch {
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .primary-color { background: var(--primary-color); }
+        .secondary-color { background: var(--secondary-color); }
+        .success-color { background: var(--success-color); }
+        .warning-color { background: var(--warning-color); }
+        .danger-color { background: var(--danger-color); }
+        .info-color { background: var(--info-color); }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" type="button" title="Cambiar tema">
+        <i class="bi bi-moon"></i>
+    </button>
+
+    <div class="demo-container">
+        <!-- Header -->
+        <div class="demo-section text-center fade-in">
+            <h1 class="display-4 fw-bold mb-3" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                IphoneStore Frontend Improvements
+            </h1>
+            <p class="lead mb-4">Modernización completa del sistema de gestión con tecnologías web avanzadas</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <span class="badge bg-primary fs-6">🎨 Diseño Moderno</span>
+                <span class="badge bg-success fs-6">📱 PWA Ready</span>
+                <span class="badge bg-info fs-6">♿ Accesible</span>
+                <span class="badge bg-warning fs-6">🚀 Alto Rendimiento</span>
+            </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="demo-section slide-up">
+            <h2 class="h3 mb-4">🌟 Características Principales</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-palette"></i>
+                    </div>
+                    <h4>Diseño Apple-Inspired</h4>
+                    <p class="text-muted">Sistema de diseño moderno con gradientes, glassmorphism y paleta de colores inspirada en Apple.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-phone"></i>
+                    </div>
+                    <h4>Mobile-First</h4>
+                    <p class="text-muted">Diseño responsive con optimizaciones específicas para dispositivos móviles y táctiles.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-gear"></i>
+                    </div>
+                    <h4>PWA Completa</h4>
+                    <p class="text-muted">Aplicación web progresiva con service worker, caché offline y capacidad de instalación.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightning"></i>
+                    </div>
+                    <h4>Interacciones Avanzadas</h4>
+                    <p class="text-muted">Animaciones suaves, micro-interacciones y gestos táctiles para mejor experiencia de usuario.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-table"></i>
+                    </div>
+                    <h4>Tablas Inteligentes</h4>
+                    <p class="text-muted">Búsqueda, ordenamiento, filtros, acciones en lote y exportación de datos.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-universal-access"></i>
+                    </div>
+                    <h4>Accesibilidad</h4>
+                    <p class="text-muted">Cumple con WCAG 2.1, navegación por teclado, soporte para lectores de pantalla.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Palette -->
+        <div class="demo-section slide-up" style="animation-delay: 0.1s">
+            <h2 class="h3 mb-4">🎨 Paleta de Colores</h2>
+            <div class="color-palette">
+                <div class="color-swatch primary-color">
+                    Primary<br>
+                    <small>#007AFF</small>
+                </div>
+                <div class="color-swatch secondary-color">
+                    Secondary<br>
+                    <small>#5856D6</small>
+                </div>
+                <div class="color-swatch success-color">
+                    Success<br>
+                    <small>#34C759</small>
+                </div>
+                <div class="color-swatch warning-color">
+                    Warning<br>
+                    <small>#FF9500</small>
+                </div>
+                <div class="color-swatch danger-color">
+                    Danger<br>
+                    <small>#FF3B30</small>
+                </div>
+                <div class="color-swatch info-color">
+                    Info<br>
+                    <small>#5AC8FA</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Components -->
+        <div class="demo-section slide-up" style="animation-delay: 0.2s">
+            <h2 class="h3 mb-4">🔧 Componentes Interactivos</h2>
+            
+            <h4>Botones Modernos</h4>
+            <div class="d-flex gap-2 mb-4 flex-wrap">
+                <button class="btn btn-primary-modern">
+                    <i class="bi bi-star"></i> Primary
+                </button>
+                <button class="btn btn-secondary-modern">
+                    <i class="bi bi-heart"></i> Secondary
+                </button>
+                <button class="btn btn-success-modern">
+                    <i class="bi bi-check"></i> Success
+                </button>
+                <button class="btn btn-danger-modern">
+                    <i class="bi bi-trash"></i> Danger
+                </button>
+            </div>
+
+            <h4>Formularios Mejorados</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control-modern" placeholder="ejemplo@email.com" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control-modern" placeholder="+1234567890">
+                    </div>
+                </div>
+            </div>
+
+            <h4>Tarjetas Modernas</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card-modern">
+                        <div class="card-modern-header">
+                            <h5 class="mb-0">Productos</h5>
+                        </div>
+                        <div class="card-modern-body">
+                            <div class="display-6 text-primary fw-bold">156</div>
+                            <p class="text-muted">Total en inventario</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-modern">
+                        <div class="card-modern-header">
+                            <h5 class="mb-0">Clientes</h5>
+                        </div>
+                        <div class="card-modern-body">
+                            <div class="display-6 text-success fw-bold">89</div>
+                            <p class="text-muted">Clientes activos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-modern">
+                        <div class="card-modern-header">
+                            <h5 class="mb-0">Ventas</h5>
+                        </div>
+                        <div class="card-modern-body">
+                            <div class="display-6 text-warning fw-bold">$45K</div>
+                            <p class="text-muted">Este mes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Demo -->
+        <div class="demo-section slide-up" style="animation-delay: 0.3s">
+            <h2 class="h3 mb-4">📊 Tabla Avanzada</h2>
+            <div class="demo-table">
+                <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Productos Demo</h5>
+                    <div class="d-flex gap-2">
+                        <div class="position-relative">
+                            <i class="bi bi-search position-absolute start-0 top-50 translate-middle-y ms-2 text-muted"></i>
+                            <input type="text" class="form-control ps-4" placeholder="Buscar..." style="min-width: 200px;">
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-modern table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded p-2 me-3">📱</div>
+                                    <div>
+                                        <div class="fw-semibold">iPhone 15 Pro</div>
+                                        <small class="text-muted">256GB Space Black</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-success fw-bold">$999.00</span></td>
+                            <td><span class="fw-bold">25</span></td>
+                            <td><span class="badge bg-success">Disponible</span></td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded p-2 me-3">📱</div>
+                                    <div>
+                                        <div class="fw-semibold">iPhone 15 Pro Max</div>
+                                        <small class="text-muted">512GB Natural Titanium</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-success fw-bold">$1,199.00</span></td>
+                            <td><span class="fw-bold">8</span></td>
+                            <td><span class="badge bg-warning">Stock Bajo</span></td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded p-2 me-3">📱</div>
+                                    <div>
+                                        <div class="fw-semibold">iPhone SE</div>
+                                        <small class="text-muted">128GB Midnight</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="text-success fw-bold">$429.00</span></td>
+                            <td><span class="fw-bold">2</span></td>
+                            <td><span class="badge bg-danger">Crítico</span></td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Technical Features -->
+        <div class="demo-section slide-up" style="animation-delay: 0.4s">
+            <h2 class="h3 mb-4">⚡ Características Técnicas</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>🎨 Diseño y UX</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Sistema de design tokens</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Tema claro/oscuro</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Animaciones CSS</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Glassmorphism effects</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Tipografía Apple-inspired</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>📱 Mobile & PWA</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Service Worker</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Offline functionality</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>App manifest</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Touch optimizations</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Pull to refresh</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5>🚀 Performance</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Asset caching</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Lazy loading</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Debounced searches</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Optimized images</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Minified assets</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>♿ Accesibilidad</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>WCAG 2.1 compliance</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Keyboard navigation</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Screen reader support</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>High contrast mode</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Reduced motion support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Actions -->
+        <div class="demo-section text-center slide-up" style="animation-delay: 0.5s">
+            <h2 class="h3 mb-4">🎮 Prueba las Funcionalidades</h2>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <button class="btn btn-primary-modern" onclick="toggleTheme()">
+                    <i class="bi bi-palette"></i> Cambiar Tema
+                </button>
+                <button class="btn btn-secondary-modern" onclick="showNotification('¡Funcionalidad de notificaciones activada!', 'success')">
+                    <i class="bi bi-bell"></i> Mostrar Notificación
+                </button>
+                <button class="btn btn-success-modern" onclick="simulateLoading()">
+                    <i class="bi bi-arrow-clockwise"></i> Simular Carga
+                </button>
+                <button class="btn btn-info" onclick="testKeyboardShortcuts()">
+                    <i class="bi bi-keyboard"></i> Atajos (Ctrl+K)
+                </button>
+            </div>
+            
+            <div class="mt-4 p-3 bg-light rounded">
+                <h6>📋 Atajos de Teclado:</h6>
+                <div class="d-flex justify-content-center gap-4 flex-wrap small">
+                    <span><code>Ctrl + K</code> → Buscar</span>
+                    <span><code>Escape</code> → Cerrar modales</span>
+                    <span><code>Tab</code> → Navegación</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = newTheme === 'light' ? 'bi bi-moon' : 'bi bi-sun';
+        }
+        
+        function simulateLoading() {
+            const btn = event.target;
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+                if (window.iPhoneStoreApp) {
+                    const app = new window.iPhoneStoreApp();
+                    app.showNotification('Carga completada exitosamente', 'success');
+                }
+            }, 2000);
+        }
+        
+        function testKeyboardShortcuts() {
+            if (window.iPhoneStoreApp) {
+                const app = new window.iPhoneStoreApp();
+                app.showNotification('Presiona Ctrl+K para buscar o Escape para cerrar', 'info', 5000);
+            }
+        }
+    </script>
+</body>
+</html>
