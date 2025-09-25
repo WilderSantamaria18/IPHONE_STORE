@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Usuarios - IphoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(30,30,30,0.70), rgba(30,30,30,0.70)), url('https://wallpapers.com/images/hd/apple-logo-in-3d-silver-design-i0fezrk90tf76l69.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: rgba(30, 30, 30, 0.92);
+            color: #fff;
+            padding-top: 2rem;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar .navbar-brand {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .sidebar .nav-link {
+            color: #e0e0e0;
+            font-size: 1.08rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            padding: 12px 18px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            box-shadow: 0 2px 8px 0 rgba(78,115,223,0.08);
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .brand-logo {
+            width: 38px;
+            margin-right: 12px;
+            filter: grayscale(1) brightness(1.2);
+        }
+        .main-content {
+            padding: 2.5rem 2rem;
+        }
+        .table-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 18px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            border-bottom: none;
+            background: rgba(0,0,0,0.03);
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem 0.75rem;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(0,123,255,0.03);
+        }
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            border-radius: 0.375rem;
+            margin: 0 2px;
+        }
+        .alert-info {
+            background-color: rgba(13, 110, 253, 0.1);
+            border: 1px solid rgba(13, 110, 253, 0.25);
+            border-radius: 0.5rem;
+            color: #0c5460;
+        }
+        .alert-info .bi {
+            color: #0c5460;
+        }
+        .badge-cargo {
+            font-size: 0.8em;
+            padding: 0.35em 0.65em;
+            border-radius: 0.375rem;
+        }
+        .badge-administracion {
+            background-color: rgba(220,53,69,0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220,53,69,0.2);
+        }
+        .badge-ventas {
+            background-color: rgba(40,167,69,0.1);
+            color: #28a745;
+            border: 1px solid rgba(40,167,69,0.2);
+        }
+        .badge-almacen {
+            background-color: rgba(255,193,7,0.1);
+            color: #856404;
+            border: 1px solid rgba(255,193,7,0.2);
+        }
+        .user-id {
+            font-weight: 700;
+            color: #6c757d;
+            background: rgba(108, 117, 125, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            display: inline-block;
+        }
+        .dni-info {
+            font-family: 'Courier New', monospace;
+            color: #495057;
+            font-weight: 600;
+            background: rgba(108, 117, 125, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            display: inline-block;
+        }
+        .email-link {
+            color: #0d6efd;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .email-link:hover {
+            color: #0a58ca;
+            text-decoration: underline;
+        }
+        .username-code {
+            background: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                min-height: auto;
+                padding-top: 1rem;
+            }
+            .main-content {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+                flex-direction: row !important;
+                padding: 1rem 0.5rem;
+                overflow-x: auto;
+            }
+            .sidebar .navbar-brand {
+                margin-bottom: 0;
+                font-size: 1.2rem;
+            }
+            .sidebar .nav-link {
+                margin-bottom: 0.5rem;
+                font-size: 0.98rem;
+                padding: 8px 10px;
+            }
+            .main-content {
+                padding: 1rem 0.2rem;
+            }
+            .table-responsive {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 1rem;
+            }
+            .d-flex.justify-content-between .btn {
+                align-self: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column align-items-start">
+                <a class="navbar-brand d-flex align-items-center mb-4" href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
+                    <span>IphoneStore</span>
+                </a>
+                <a th:href="@{/menu}" class="nav-link"><i class="bi bi-house-door-fill"></i> Menú Principal</a>
+                <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')"><i class="bi bi-phone-fill"></i> Productos</a>
+                <a th:href="@{/Cliente/listar}" class="nav-link" sec:authorize="hasAuthority('CLIENTE_READ')"><i class="bi bi-people-fill"></i> Clientes</a>
+                <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')"><i class="bi bi-truck"></i> Proveedores</a>
+                <a th:href="@{/pedidos/listar}" class="nav-link" sec:authorize="hasAuthority('PEDIDO_READ')"><i class="bi bi-bag-check-fill"></i> Pedidos</a>
+                <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')"><i class="bi bi-receipt-cutoff"></i> Comprobantes</a>
+                <a th:href="@{/usuarios/listar}" class="nav-link active" sec:authorize="hasAuthority('USUARIO_READ')"><i class="bi bi-person-gear"></i> Usuarios</a>
+                <a th:href="@{/login}" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+                <div class="mt-auto w-100 text-center text-muted small pt-5">
+                    © 2025 IphoneStore. Todos los derechos reservados.
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-lg-9 col-md-8 main-content">
+                <!-- Header reorganizado con título a la izquierda y botones a la derecha -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">
+                        <i class="bi bi-person-gear"></i> Lista de Usuarios
+                    </h2>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/menu}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Menú
+                        </a>
+                        <a th:href="@{/usuarios/nuevo}" 
+                           class="btn btn-primary"
+                           sec:authorize="hasAuthority('USUARIO_CREATE')">
+                            <i class="bi bi-person-plus-fill"></i> Nuevo Usuario
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Mensaje informativo para usuarios de solo lectura -->
+                <div class="alert alert-info d-flex align-items-center mb-3" 
+                     sec:authorize="hasAuthority('USUARIO_READ') and !hasAuthority('USUARIO_CREATE')">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    <span>Está visualizando los usuarios en <strong>modo consulta</strong>. Contacte a su administrador si necesita realizar modificaciones.</span>
+                </div>
+
+                <!-- Contenedor de tabla unificado -->
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombres</th>
+                                    <th>DNI</th>
+                                    <th>Email</th>
+                                    <th>Usuario</th>
+                                    <th>Cargo</th>
+                                    <th>Acciones</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="usuario : ${usuarios}">
+                                    <td>
+                                        <span class="user-id" th:text="${usuario.idUsuario}"></span>
+                                    </td>
+                                    <td>
+                                        <strong th:text="${usuario.nombres}"></strong>
+                                    </td>
+                                    <td>
+                                        <span class="dni-info" th:text="${usuario.dni}"></span>
+                                    </td>
+                                    <td>
+                                        <a th:href="'mailto:' + ${usuario.email}" 
+                                           th:text="${usuario.email}" 
+                                           class="email-link"
+                                           th:if="${usuario.email != null and !usuario.email.isEmpty()}"></a>
+                                        <span th:unless="${usuario.email != null and !usuario.email.isEmpty()}" 
+                                              class="text-muted">
+                                            <i class="bi bi-dash-circle"></i> No disponible
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <code class="username-code" th:text="${usuario.username}"></code>
+                                    </td>
+                                    <td>
+                                        <span th:switch="${usuario.cargo != null ? usuario.cargo.nombre : 'Sin cargo'}">
+                                            <span th:case="'Administracion'" class="badge badge-cargo badge-administracion">
+                                                <i class="bi bi-shield-fill-check"></i> Administración
+                                            </span>
+                                            <span th:case="'Ventas'" class="badge badge-cargo badge-ventas">
+                                                <i class="bi bi-cart-fill"></i> Ventas
+                                            </span>
+                                            <span th:case="'Almacen'" class="badge badge-cargo badge-almacen">
+                                                <i class="bi bi-box-seam"></i> Almacén
+                                            </span>
+                                            <span th:case="*" class="badge bg-secondary">
+                                                <i class="bi bi-question-circle"></i> Sin cargo
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1 justify-content-center">
+                                            <!-- Activo: editar / inhabilitar -->
+                                            <a th:if="${usuario.estado.name() == 'Activo'}"
+                                               th:href="@{'/usuarios/editar/' + ${usuario.idUsuario}}" 
+                                               class="btn btn-outline-secondary btn-action"
+                                               sec:authorize="hasAuthority('USUARIO_UPDATE')"
+                                               title="Editar usuario">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a th:if="${usuario.estado.name() == 'Activo'}"
+                                               th:href="@{'/usuarios/eliminar/' + ${usuario.idUsuario}}" 
+                                               class="btn btn-outline-warning btn-action"
+                                               sec:authorize="hasAuthority('USUARIO_UPDATE')"
+                                               title="Inhabilitar usuario">
+                                                <i class="bi bi-person-x"></i>
+                                            </a>
+                                            <!-- Inactivo: reactivar -->
+                                            <form th:if="${usuario.estado.name() == 'Inactivo'}"
+                                                  th:action="@{'/usuarios/activar/' + ${usuario.idUsuario}}"
+                                                  method="post" class="d-inline"
+                                                  sec:authorize="hasAuthority('USUARIO_UPDATE')">
+                                                <button type="submit" class="btn btn-success btn-action" title="Reactivar usuario">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <!-- Mensaje para usuarios de solo lectura -->
+                                        <div class="d-flex align-items-center text-muted mt-1" 
+                                             sec:authorize="hasAuthority('USUARIO_READ') and !hasAuthority('USUARIO_UPDATE')">
+                                            <i class="bi bi-eye-fill me-1"></i>
+                                            <small>Solo consulta</small>
+                                        </div>
+                                    </td>
+                                                                        <td>
+                                        <span th:classappend="${usuario.estado.name() == 'Activo'} ? 'badge bg-success' : 'badge bg-secondary'"
+                                              th:text="${usuario.estado.name()}"></span>
+                                    </td>
+                                </tr>
+                                <!-- Estado vacío mejorado -->
+                                <tr th:if="${usuarios == null or usuarios.isEmpty()}">
+                                    <td colspan="7" class="text-center py-4">
+                                        <div class="text-muted">
+                                            <i class="bi bi-people display-1 opacity-25"></i>
+                                            <h5 class="mt-3">No se encontraron usuarios</h5>
+                                            <p>
+                                                <a th:href="@{/usuarios/nuevo}" 
+                                                   class="btn btn-primary"
+                                                   sec:authorize="hasAuthority('USUARIO_CREATE')">
+                                                    <i class="bi bi-person-plus-fill"></i> Crear primer usuario
+                                                </a>
+                                            </p>
+                                            <div class="mt-3" sec:authorize="!hasAuthority('USUARIO_CREATE')">
+                                                <small class="text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>
+                                                    Contacte al administrador para crear usuarios
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>

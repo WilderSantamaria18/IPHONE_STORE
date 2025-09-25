@@ -1,0 +1,109 @@
+2025-08-01T16:37:25.552-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] c.i.continua2.demo.Continua2Application  : Starting Continua2Application using Java 21.0.2 with PID 2212 (C:\Users\alcm_\Desarrollo_Aplicacion_2\Continua2\target\classes started by alcm_ in C:\Users\alcm_\Desarrollo_Aplicacion_2\Continua2)
+2025-08-01T16:37:25.562-05:00 DEBUG 2212 --- [iPhone Store Management System] [restartedMain] c.i.continua2.demo.Continua2Application  : Running with Spring Boot v3.5.4, Spring v6.2.9
+2025-08-01T16:37:25.564-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] c.i.continua2.demo.Continua2Application  : The following 1 profile is active: "dev"
+2025-08-01T16:37:25.669-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-01T16:37:25.671-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-01T16:37:28.654-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-01T16:37:28.933-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 254 ms. Found 9 JPA repository interfaces.
+2025-08-01T16:37:30.314-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2025-08-01T16:37:30.355-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-01T16:37:30.356-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-01T16:37:30.448-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.a.c.c.C.[.[localhost].[/iphone-store]  : Initializing Spring embedded WebApplicationContext
+2025-08-01T16:37:30.449-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4776 ms
+2025-08-01T16:37:31.054-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-01T16:37:31.154-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-01T16:37:31.219-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-01T16:37:31.992-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-01T16:37:32.162-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-01T16:37:32.650-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5585428c
+2025-08-01T16:37:32.658-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-01T16:37:32.769-05:00  WARN 2212 --- [iPhone Store Management System] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-01T16:37:32.775-05:00  WARN 2212 --- [iPhone Store Management System] [restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-08-01T16:37:32.812-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-01T16:37:36.427-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T16:37:37.595-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-08-01T16:37:40.270-05:00  WARN 2212 --- [iPhone Store Management System] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-01T16:37:41.098-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-08-01T16:37:41.181-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name myUserDetailsService
+2025-08-01T16:37:42.777-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-08-01T16:37:42.988-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/iphone-store'
+2025-08-01T16:37:43.017-05:00  INFO 2212 --- [iPhone Store Management System] [restartedMain] c.i.continua2.demo.Continua2Application  : Started Continua2Application in 18.282 seconds (process running for 19.468)
+2025-08-01T16:37:43.671-05:00  INFO 2212 --- [iPhone Store Management System] [RMI TCP Connection(2)-127.0.0.1] o.a.c.c.C.[.[localhost].[/iphone-store]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-01T16:37:43.671-05:00  INFO 2212 --- [iPhone Store Management System] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-01T16:37:43.673-05:00  INFO 2212 --- [iPhone Store Management System] [RMI TCP Connection(2)-127.0.0.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-08-01T16:38:18.858-05:00 DEBUG 2212 --- [iPhone Store Management System] [http-nio-8091-exec-4] org.hibernate.SQL                        : 
+    /* <criteria> */ select
+        ue1_0.id_usuario,
+        ue1_0.id_cargo,
+        ue1_0.contrasena,
+        ue1_0.dni,
+        ue1_0.email,
+        ue1_0.estado,
+        ue1_0.nombres,
+        ue1_0.username 
+    from
+        usuario ue1_0 
+    where
+        ue1_0.username=?
+2025-08-01T16:38:18.995-05:00 DEBUG 2212 --- [iPhone Store Management System] [http-nio-8091-exec-4] org.hibernate.SQL                        : 
+    select
+        ce1_0.id_cargo,
+        ce1_0.descripcion,
+        ce1_0.nombre 
+    from
+        cargo ce1_0 
+    where
+        ce1_0.id_cargo=?
+2025-08-01T16:38:22.122-05:00 DEBUG 2212 --- [iPhone Store Management System] [http-nio-8091-exec-6] org.hibernate.SQL                        : 
+    /* <criteria> */ select
+        ue1_0.id_usuario,
+        ue1_0.id_cargo,
+        ue1_0.contrasena,
+        ue1_0.dni,
+        ue1_0.email,
+        ue1_0.estado,
+        ue1_0.nombres,
+        ue1_0.username 
+    from
+        usuario ue1_0 
+    where
+        ue1_0.estado=?
+2025-08-01T16:38:22.174-05:00 DEBUG 2212 --- [iPhone Store Management System] [http-nio-8091-exec-6] org.hibernate.SQL                        : 
+    select
+        ce1_0.id_cargo,
+        ce1_0.descripcion,
+        ce1_0.nombre 
+    from
+        cargo ce1_0 
+    where
+        ce1_0.id_cargo=?
+2025-08-01T16:38:22.195-05:00 DEBUG 2212 --- [iPhone Store Management System] [http-nio-8091-exec-6] org.hibernate.SQL                        : 
+    select
+        ce1_0.id_cargo,
+        ce1_0.descripcion,
+        ce1_0.nombre 
+    from
+        cargo ce1_0 
+    where
+        ce1_0.id_cargo=?
+2025-08-01T16:38:22.225-05:00 DEBUG 2212 --- [iPhone Store Management System] [http-nio-8091-exec-6] org.hibernate.SQL                        : 
+    select
+        ce1_0.id_cargo,
+        ce1_0.descripcion,
+        ce1_0.nombre 
+    from
+        cargo ce1_0 
+    where
+        ce1_0.id_cargo=?
+2025-08-01T16:39:23.556-05:00  INFO 2212 --- [iPhone Store Management System] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-01T16:39:23.577-05:00  INFO 2212 --- [iPhone Store Management System] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-08-01T16:39:23.634-05:00  INFO 2212 --- [iPhone Store Management System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-01T16:39:23.652-05:00  INFO 2212 --- [iPhone Store Management System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-01T16:39:23.699-05:00  INFO 2212 --- [iPhone Store Management System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

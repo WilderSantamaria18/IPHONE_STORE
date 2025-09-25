@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - IphoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                        url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1280&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+            animation: fadeIn 0.7s;
+        }
+        .login-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        .login-header {
+            background: transparent;
+            color: #222;
+            padding: 2rem 1rem 1rem 1rem;
+            text-align: center;
+        }
+        .brand-logo {
+            width: 54px;
+            margin-bottom: 10px;
+            filter: grayscale(1) brightness(1.2);
+        }
+        .login-body {
+            padding: 1.8rem 2rem 2rem 2rem;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #222;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+        .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.15rem rgba(78, 115, 223, 0.10);
+        }
+        .input-group-text {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px 0 0 10px;
+        }
+        .btn-login {
+            background: #222;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background 0.2s;
+            border: none;
+        }
+        .btn-login:hover {
+            background: #4e73df;
+            color: #fff;
+        }
+        .toggle-password {
+            cursor: pointer;
+            border-radius: 0 10px 10px 0;
+            border: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            border-left: none;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+        }
+        .text-muted {
+            color: #888 !important;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @media (max-width: 576px) {
+            .login-container { padding: 0 10px; }
+            .login-body { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="IphoneStore Logo" class="brand-logo">
+                <h2 class="mb-1" style="font-weight: 600;">IphoneStore</h2>
+                <div class="text-muted mb-2" style="font-size: 1.05rem;">Acceso al sistema</div>
+            </div>
+            <div class="login-body">
+                <form th:action="@{/login}" method="post">
+                    <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        [[${error}]]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                            <span class="toggle-password" onclick="togglePassword()">
+                                <i class="bi bi-eye" id="toggleIcon"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-grid mb-2">
+                        <button type="submit" class="btn btn-login btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Ingresar
+                        </button>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="#" class="text-decoration-none text-muted" style="font-size: 0.98rem;">¿Olvidó su contraseña?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="text-center text-muted mt-3" style="font-size: 0.97rem;">
+            © 2025 IphoneStore. Todos los derechos reservados.
+        </div>
+    </div>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('bi-eye');
+                toggleIcon.classList.add('bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('bi-eye-slash');
+                toggleIcon.classList.add('bi-eye');
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

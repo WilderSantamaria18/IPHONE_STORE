@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crear Pedido - IphoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(rgba(30,30,30,0.70), rgba(30,30,30,0.70)),
+            url('https://wallpapers.com/images/hd/apple-logo-in-3d-silver-design-i0fezrk90tf76l69.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: rgba(30, 30, 30, 0.92);
+            color: #fff;
+            padding-top: 2rem;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar .navbar-brand {
+            font-size: 1.7rem; font-weight: 600; color:#fff; letter-spacing:1px; text-decoration:none;
+        }
+        .sidebar .nav-link {
+            color:#e0e0e0; font-size:1.08rem; margin-bottom:1rem; border-radius:10px;
+            padding:12px 18px; transition:.2s background,.2s color,.2s box-shadow; text-decoration:none;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.10); color:#fff; box-shadow:0 2px 8px rgba(78,115,223,0.08);
+        }
+        .sidebar .nav-link i { margin-right:10px; }
+        .brand-logo { width:38px; margin-right:12px; filter:grayscale(1) brightness(1.2); }
+        .main-content { padding:2.5rem 2rem; }
+        h2.page-title {
+            color:#222; opacity:.90; font-weight:600; display:flex; align-items:center;
+            gap:.65rem; margin-bottom:1.7rem;
+        }
+        .form-wrapper-card, .card {
+            border-radius:18px; border:none;
+            background:rgba(255,255,255,0.92); backdrop-filter:blur(2px);
+            box-shadow:0 8px 32px 0 rgba(31,38,135,0.10);
+        }
+        .card-header {
+            background:transparent; border-bottom:1px solid rgba(0,0,0,0.10); color:#222;
+            border-radius:18px 18px 0 0 !important;
+        }
+        .section-title-icon { font-size:1.2rem; margin-right:.35rem; }
+        .sub-card-header h5 { font-weight:600; font-size:1rem; display:flex; align-items:center; gap:.4rem; }
+        .producto-row {
+            background:rgba(248,249,250,0.80);
+            border-left:4px solid #0d6efd; margin-bottom:15px; transition:.25s; border-radius:10px; padding:15px;
+        }
+        .producto-row:hover { transform:translateY(-2px); box-shadow:0 4px 15px rgba(13,110,253,0.15); }
+        .btn-remove-product { transition:.25s; }
+        .btn-remove-product:hover { transform:scale(1.08); }
+        .total-section {
+            background:linear-gradient(135deg,#198754 0%,#20c997 100%);
+            color:#fff; border-radius:15px; padding:20px; text-align:center;
+        }
+        .form-control, .form-select { background:rgba(255,255,255,0.90); border:1px solid rgba(0,0,0,0.12); }
+        .form-control:focus, .form-select:focus {
+            background:#fff; border-color:#0d6efd; box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+        }
+        .btn-primary { background:linear-gradient(135deg,#0d6efd 0%,#084298 100%); border:none; }
+        .btn-primary:hover { background:linear-gradient(135deg,#0b5ed7 0%,#06326d 100%); }
+        .btn-success { background:linear-gradient(135deg,#198754 0%,#157347 100%); border:none; }
+        .btn-success:hover { background:linear-gradient(135deg,#157347 0%,#0f5a36 100%); }
+        .alert-success, .alert-danger { border:none; }
+        .alert-success { background:rgba(25,135,84,0.15); color:#157347; }
+        .alert-danger { background:rgba(220,53,69,0.15); color:#842029; }
+        .actions-footer {
+            border-top:1px solid rgba(0,0,0,0.08); margin-top:1.5rem; padding-top:1.25rem;
+        }
+        @media (max-width:991.98px){
+            .main-content { padding:1.2rem 0.6rem; }
+        }
+        @media (max-width:767.98px){
+            .sidebar {
+                position:static; width:100%; min-height:auto; flex-direction:row!important;
+                padding:1rem .5rem; overflow-x:auto;
+            }
+            .sidebar .navbar-brand { margin-bottom:0; font-size:1.2rem; }
+            .sidebar .nav-link { margin-bottom:.5rem; font-size:.95rem; padding:8px 10px; }
+            .main-content { padding:1rem .6rem; }
+            h2.page-title { font-size:1.4rem; margin-bottom:1.1rem; }
+            .actions-footer { flex-direction:column; gap:.75rem; }
+            .actions-footer .btn { width:100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-lg-3 col-md-4 sidebar d-flex flex-column align-items-start">
+            <a class="navbar-brand d-flex align-items-center mb-4" href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
+                <span>IphoneStore</span>
+            </a>
+            <a th:href="@{/menu}" class="nav-link"><i class="bi bi-house-door-fill"></i> Menú Principal</a>
+            <a th:href="@{/productos/listar}" class="nav-link" sec:authorize="hasAuthority('PRODUCTO_READ')"><i class="bi bi-phone-fill"></i> Productos</a>
+            <a th:href="@{/Cliente/listar}" class="nav-link" sec:authorize="hasAuthority('CLIENTE_READ')"><i class="bi bi-people-fill"></i> Clientes</a>
+            <a th:href="@{/proveedores/listar}" class="nav-link" sec:authorize="hasAuthority('PROVEEDOR_READ')"><i class="bi bi-truck"></i> Proveedores</a>
+            <a th:href="@{/pedidos/listar}" class="nav-link active" sec:authorize="hasAuthority('PEDIDO_READ')"><i class="bi bi-bag-check-fill"></i> Pedidos</a>
+            <a th:href="@{/comprobantes/listar}" class="nav-link" sec:authorize="hasAuthority('COMPROBANTE_READ')"><i class="bi bi-receipt-cutoff"></i> Comprobantes</a>
+            <a th:href="@{/usuarios/listar}" class="nav-link" sec:authorize="hasAuthority('USUARIO_READ')"><i class="bi bi-person-gear"></i> Usuarios</a>
+            <a th:href="@{/login}" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+            <div class="mt-auto w-100 text-center text-muted small pt-5">
+                © 2025 IphoneStore. Todos los derechos reservados.
+            </div>
+        </nav>
+
+        <main class="col-lg-9 col-md-8 main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="page-title mb-0">
+                    <i class="bi bi-plus-circle"></i>
+                    Crear Nuevo Pedido
+                </h2>
+                <a th:href="@{/pedidos/listar}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Cancelar
+                </a>
+            </div>
+
+            <!-- Alertas -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <form th:action="@{/pedidos/guardar}" method="post" id="pedidoForm">
+                <div class="row g-4">
+                    <!-- Datos -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="bi bi-clipboard-data section-title-icon"></i> Datos del Pedido</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><i class="bi bi-person"></i> Cliente *</label>
+                                    <select name="cliente.idCliente" id="cliente" class="form-select" required>
+                                        <option value="">Seleccionar cliente...</option>
+                                        <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}"></option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><i class="bi bi-person-badge"></i> Usuario Responsable</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person-check"></i></span>
+                                        <input type="text" class="form-control" readonly
+                                               th:value="${usuarioAutenticado.nombres}"
+                                               style="background:#e9f7ef;color:#2d8659;font-weight:500;">
+                                    </div>
+                                    <div class="form-text text-success"><i class="bi bi-info-circle"></i> Usuario autenticado automáticamente</div>
+                                    <input type="hidden" name="usuario.idUsuario" th:value="${usuarioAutenticado.idUsuario}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold"><i class="bi bi-calendar-event"></i> Fecha de Entrega</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-calendar-check"></i></span>
+                                        <input type="text" class="form-control" readonly
+                                               th:value="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"
+                                               style="background:#e6f3ff;color:#0066cc;font-weight:500;">
+                                    </div>
+                                    <div class="form-text text-info"><i class="bi bi-info-circle"></i> Fecha establecida automáticamente</div>
+                                    <input type="hidden" name="fechaEntrega" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label fw-bold"><i class="bi bi-credit-card"></i> Tipo de Pago *</label>
+                                    <select name="tipoPago" id="tipoPago" class="form-select" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="Efectivo">Efectivo</option>
+                                        <option value="Tarjeta">Tarjeta</option>
+                                        <option value="Transferencia">Transferencia</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Resumen -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="bi bi-calculator section-title-icon"></i> Resumen del Pedido</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="total-section mb-3">
+                                    <h4 class="mb-2">Total del Pedido</h4>
+                                    <h2 class="display-6 fw-bold mb-1" id="totalPedido">S/ 0.00</h2>
+                                    <small>IVA incluido</small>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Productos:</span><span id="cantidadProductos">0</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Subtotal:</span><span id="subtotalPedido">S/ 0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productos -->
+                <div class="card mt-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-box section-title-icon"></i> Productos del Pedido</h5>
+                        <button type="button" class="btn btn-success btn-sm" id="btnAgregarProducto">
+                            <i class="bi bi-plus-circle"></i> Agregar Producto
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="productosContainer">
+                            <div class="text-center text-muted py-4" id="noProductos">
+                                <i class="bi bi-box display-6 d-block opacity-50"></i>
+                                <p class="mt-2 mb-0">No hay productos agregados.</p>
+                                <small>Use "Agregar Producto" para comenzar.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="d-flex justify-content-end gap-2 actions-footer">
+                    <button type="submit" class="btn btn-primary" id="btnGuardar" disabled>
+                        <i class="bi bi-check-circle"></i> Registrar Pedido
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>
+
+<template id="productoTemplate">
+    <div class="row align-items-center producto-row p-3 rounded mb-3">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <label class="form-label fw-bold">Producto</label>
+            <select class="form-select producto-select" name="productos[]" required>
+                <option value="">Seleccionar producto...</option>
+                <option th:each="producto : ${productos}"
+                        th:value="${producto.idProducto}"
+                        th:text="${producto.modelo + ' - S/ ' + producto.precioVenta}"></option>
+            </select>
+        </div>
+        <div class="col-md-2 mb-3 mb-md-0">
+            <label class="form-label fw-bold">Cantidad</label>
+            <input type="number" class="form-control cantidad-input" name="cantidades[]" min="1" required placeholder="1">
+        </div>
+        <div class="col-md-3 mb-3 mb-md-0">
+            <label class="form-label fw-bold">Precio Unit.</label>
+            <div class="input-group">
+                <span class="input-group-text">S/</span>
+                <input type="number" class="form-control precio-input" name="precios[]" step="0.01" readonly required placeholder="0.00">
+            </div>
+        </div>
+        <div class="col-md-2 mb-3 mb-md-0">
+            <label class="form-label fw-bold">Subtotal</label>
+            <div class="fw-bold text-primary subtotal-display">S/ 0.00</div>
+        </div>
+        <div class="col-md-1">
+            <label class="form-label d-none d-md-block">&nbsp;</label>
+            <button type="button" class="btn btn-outline-danger btn-sm btn-remove-product w-100">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </div>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(function(){
+    $('#cliente').select2({
+        theme:'bootstrap-5',
+        placeholder:'Seleccionar...',
+        minimumResultsForSearch:Infinity
+    });
+    let productoCount=0;
+    $('#btnAgregarProducto').on('click',function(){
+        const tpl=$('#productoTemplate').html();
+        $('#productosContainer').append(tpl);
+        $('#noProductos').hide();
+        const newRow=$('#productosContainer .producto-row').last();
+        newRow.find('.producto-select').select2({
+            theme:'bootstrap-5',
+            placeholder:'Seleccionar producto...',
+            minimumResultsForSearch:Infinity
+        });
+        productoCount++;
+        actualizarContadores();
+        validarFormulario();
+    });
+    $(document).on('click','.btn-remove-product',function(){
+        $(this).closest('.producto-row').remove();
+        productoCount--;
+        if(productoCount===0){ $('#noProductos').show(); }
+        actualizarTotales();
+        actualizarContadores();
+        validarFormulario();
+    });
+    $(document).on('change','.producto-select',function(){
+        const row=$(this).closest('.producto-row');
+        const id=$(this).val();
+        if(id){
+            $.get('producto-precio/'+id)
+             .done(r=>{
+                if(r.success){
+                    row.find('.precio-input').val(r.precio);
+                    if(!row.find('.cantidad-input').val()){ row.find('.cantidad-input').val(1); }
+                    calcularSubtotal(row);
+                }else{
+                    alert('Error: '+r.message);
+                }
+             }).fail((x,s,e)=>alert('Error al obtener precio: '+e));
+        } else {
+            row.find('.precio-input').val('');
+            calcularSubtotal(row);
+        }
+    });
+    $(document).on('input','.cantidad-input',function(){
+        calcularSubtotal($(this).closest('.producto-row'));
+    });
+    function calcularSubtotal(row){
+        const c=parseInt(row.find('.cantidad-input').val())||0;
+        const p=parseFloat(row.find('.precio-input').val())||0;
+        const sub=c*p;
+        row.find('.subtotal-display').text('S/ '+sub.toFixed(2));
+        actualizarTotales();
+    }
+    function actualizarTotales(){
+        let total=0;
+        $('.producto-row').each(function(){
+            const c=parseInt($(this).find('.cantidad-input').val())||0;
+            const p=parseFloat($(this).find('.precio-input').val())||0;
+            total+=c*p;
+        });
+        $('#totalPedido').text('S/ '+total.toFixed(2));
+        $('#subtotalPedido').text('S/ '+total.toFixed(2));
+    }
+    function actualizarContadores(){
+        let t=0;
+        $('.cantidad-input').each(function(){ t+=parseInt($(this).val())||0; });
+        $('#cantidadProductos').text(t);
+    }
+    function validarFormulario(){
+        const cliente=$('#cliente').val();
+        const tipoPago=$('#tipoPago').val();
+        const tieneFilas=$('.producto-row').length>0;
+        let okProductos=true;
+        $('.producto-row').each(function(){
+            const prod=$(this).find('.producto-select').val();
+            const cant=$(this).find('.cantidad-input').val();
+            const prec=$(this).find('.precio-input').val();
+            if(!prod||!cant||!prec||cant<=0||prec<=0){ okProductos=false; return false; }
+        });
+        const completo=cliente && tipoPago && tieneFilas && okProductos;
+        $('#btnGuardar').prop('disabled', !completo);
+    }
+    $('#cliente,#tipoPago').on('change',validarFormulario);
+    $(document).on('change input','.producto-select,.cantidad-input',validarFormulario);
+});
+</script>
+</body>
+</html>
