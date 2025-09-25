@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" data-theme="light">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title + ' - IphoneStore'}">IphoneStore</title>
+    
+    <!-- Meta tags for SEO and PWA -->
+    <meta name="description" content="Sistema de gestión integral para tienda de iPhones">
+    <meta name="keywords" content="iPhone, tienda, inventario, gestión">
+    <meta name="author" content="IphoneStore">
+    <meta name="theme-color" content="#007AFF">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/modern-styles.css}">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Enhanced Sidebar Navigation -->
+    <nav class="sidebar d-flex flex-column" th:fragment="sidebar(activeSection)">
+        <a class="navbar-brand d-flex align-items-center fade-in" href="#" style="animation-delay: 0.1s">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" class="brand-logo">
+            <span>IphoneStore</span>
+        </a>
+        
+        <div class="nav flex-column stagger-fade">
+            <a th:href="@{/menu}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'menu'} ? 'active' : ''">
+                <i class="bi bi-house-door-fill"></i> Menú Principal
+            </a>
+            <a th:href="@{/productos/listar}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'productos'} ? 'active' : ''"
+               sec:authorize="hasAuthority('PRODUCTO_READ')">
+                <i class="bi bi-phone-fill"></i> Productos
+            </a>
+            <a th:href="@{/Cliente/listar}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'clientes'} ? 'active' : ''"
+               sec:authorize="hasAuthority('CLIENTE_READ')">
+                <i class="bi bi-people-fill"></i> Clientes
+            </a>
+            <a th:href="@{/proveedores/listar}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'proveedores'} ? 'active' : ''"
+               sec:authorize="hasAuthority('PROVEEDOR_READ')">
+                <i class="bi bi-truck"></i> Proveedores
+            </a>
+            <a th:href="@{/pedidos/listar}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'pedidos'} ? 'active' : ''"
+               sec:authorize="hasAuthority('PEDIDO_READ')">
+                <i class="bi bi-bag-check-fill"></i> Pedidos
+            </a>
+            <a th:href="@{/comprobantes/listar}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'comprobantes'} ? 'active' : ''"
+               sec:authorize="hasAuthority('COMPROBANTE_READ')">
+                <i class="bi bi-receipt-cutoff"></i> Comprobantes
+            </a>
+            <a th:href="@{/usuarios/listar}" 
+               class="nav-link" 
+               th:classappend="${activeSection == 'usuarios'} ? 'active' : ''"
+               sec:authorize="hasAuthority('USUARIO_READ')">
+                <i class="bi bi-person-gear"></i> Usuarios
+            </a>
+        </div>
+        
+        <div class="mt-auto">
+            <div class="nav-link text-muted small mb-2">
+                <i class="bi bi-person-circle"></i>
+                <span sec:authentication="name">Usuario</span>
+            </div>
+            <a th:href="@{/login}" class="nav-link text-danger">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
+            <div class="text-center text-muted small pt-2">
+                © 2025 IphoneStore
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header Fragment -->
+    <div class="content-header fade-in" th:fragment="page-header(title, subtitle, actions)">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="page-title" th:text="${title}">Título</h1>
+                <p class="page-subtitle" th:text="${subtitle}">Subtítulo</p>
+            </div>
+            <div th:if="${actions}" th:insert="${actions}">
+                <!-- Action buttons will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Fragment -->
+    <div th:fragment="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script th:src="@{/app.js}"></script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+{
+    "name": "IphoneStore - Sistema de Gestión",
+    "short_name": "IphoneStore",
+    "description": "Sistema integral de gestión para tienda de iPhones",
+    "start_url": "/menu",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "theme_color": "#007AFF",
+    "background_color": "#667eea",
+    "categories": ["business", "productivity"],
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23007AFF' rx='32'/><text x='96' y='135' font-size='96' text-anchor='middle' fill='white'>📱</text></svg>",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23007AFF' rx='64'/><text x='256' y='340' font-size='256' text-anchor='middle' fill='white'>📱</text></svg>",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Productos",
+            "short_name": "Productos",
+            "url": "/productos/listar",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%2334C759' rx='16'/><text x='48' y='64' font-size='48' text-anchor='middle' fill='white'>📱</text></svg>",
+                    "sizes": "96x96",
+                    "type": "image/svg+xml"
+                }
+            ]
+        },
+        {
+            "name": "Clientes",
+            "short_name": "Clientes",
+            "url": "/Cliente/listar",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%235856D6' rx='16'/><text x='48' y='64' font-size='48' text-anchor='middle' fill='white'>👥</text></svg>",
+                    "sizes": "96x96",
+                    "type": "image/svg+xml"
+                }
+            ]
+        },
+        {
+            "name": "Pedidos",
+            "short_name": "Pedidos",
+            "url": "/pedidos/listar",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%23FF9500' rx='16'/><text x='48' y='64' font-size='48' text-anchor='middle' fill='white'>📦</text></svg>",
+                    "sizes": "96x96",
+                    "type": "image/svg+xml"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect width='540' height='720' fill='%23667eea'/><rect x='20' y='20' width='500' height='680' fill='white' rx='16'/><text x='270' y='360' font-size='48' text-anchor='middle' fill='%23667eea'>IphoneStore Dashboard</text></svg>",
+            "sizes": "540x720",
+            "type": "image/svg+xml",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 640'><rect width='1024' height='640' fill='%23667eea'/><rect x='20' y='20' width='984' height='600' fill='white' rx='16'/><text x='512' y='320' font-size='48' text-anchor='middle' fill='%23667eea'>IphoneStore Desktop</text></svg>",
+            "sizes": "1024x640",
+            "type": "image/svg+xml",
+            "form_factor": "wide"
+        }
+    ]
+}

@@ -18,6 +18,9 @@ class iPhoneStoreApp {
         this.setupAnimations();
         this.setupKeyboardShortcuts();
         this.setupMobileOptimizations();
+        this.setupPWA();
+        this.setupNetworkMonitoring();
+        this.setupAdvancedFeatures();
     }
 
     // Theme Management
@@ -489,19 +492,190 @@ class iPhoneStoreApp {
         });
     }
 
-    // Mobile Optimizations
-    setupMobileOptimizations() {
-        // Touch-friendly interactions
-        if ('ontouchstart' in window) {
-            document.body.classList.add('touch-device');
-            
-            // Add swipe gestures to tables
-            this.setupSwipeGestures();
+    // PWA Installation
+    setupPWA() {
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                        this.checkForUpdates(registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
         }
 
-        // Viewport height fix for mobile
-        this.setViewportHeight();
-        window.addEventListener('resize', () => this.setViewportHeight());
+        // Handle install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            this.showInstallPrompt(deferredPrompt);
+        });
+
+        // Handle app installed
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            this.hideInstallPrompt();
+            this.showNotification('¡Aplicación instalada exitosamente!', 'success');
+        });
+    }
+
+    showInstallPrompt(deferredPrompt) {
+        const installPrompt = document.createElement('div');
+        installPrompt.className = 'install-prompt';
+        installPrompt.innerHTML = `
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-phone text-primary"></i>
+                <div class="flex-grow-1">
+                    <strong>Instalar IphoneStore</strong>
+                    <p class="mb-0 small text-muted">Accede rápidamente desde tu pantalla de inicio</p>
+                </div>
+                <button class="btn btn-primary btn-sm" id="installBtn">Instalar</button>
+                <button class="btn btn-outline-secondary btn-sm" id="dismissBtn">×</button>
+            </div>
+        `;
+
+        document.body.appendChild(installPrompt);
+        setTimeout(() => installPrompt.classList.add('show'), 100);
+
+        document.getElementById('installBtn').addEventListener('click', () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                this.hideInstallPrompt();
+                deferredPrompt = null;
+            });
+        });
+
+        document.getElementById('dismissBtn').addEventListener('click', () => {
+            this.hideInstallPrompt();
+        });
+    }
+
+    hideInstallPrompt() {
+        const installPrompt = document.querySelector('.install-prompt');
+        if (installPrompt) {
+            installPrompt.classList.remove('show');
+            setTimeout(() => installPrompt.remove(), 300);
+        }
+    }
+
+    checkForUpdates(registration) {
+        setInterval(() => {
+            registration.update();
+        }, 60000); // Check every minute
+
+        registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    this.showUpdatePrompt(registration);
+                }
+            });
+        });
+    }
+
+    showUpdatePrompt(registration) {
+        this.showNotification(
+            'Nueva versión disponible. ¿Recargar la aplicación?',
+            'info',
+            10000,
+            [
+                {
+                    text: 'Actualizar',
+                    action: () => {
+                        if (registration.waiting) {
+                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                            window.location.reload();
+                        }
+                    }
+                },
+                {
+                    text: 'Más tarde',
+                    action: () => {}
+                }
+            ]
+        );
+    }
+
+    // Network Status Monitoring
+    setupNetworkMonitoring() {
+        // Online/offline detection
+        window.addEventListener('online', () => {
+            this.hideOfflineIndicator();
+            this.showNotification('Conexión restaurada', 'success', 3000);
+        });
+
+        window.addEventListener('offline', () => {
+            this.showOfflineIndicator();
+            this.showNotification('Trabajando sin conexión', 'warning', 5000);
+        });
+
+        // Connection quality detection
+        if ('connection' in navigator) {
+            this.updateConnectionStatus();
+            navigator.connection.addEventListener('change', () => {
+                this.updateConnectionStatus();
+            });
+        }
+
+        // Check initial status
+        if (!navigator.onLine) {
+            this.showOfflineIndicator();
+        }
+    }
+
+    showOfflineIndicator() {
+        let indicator = document.querySelector('.offline-indicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'offline-indicator';
+            indicator.innerHTML = `
+                <i class="bi bi-wifi-off me-2"></i>
+                Trabajando sin conexión
+            `;
+            document.body.appendChild(indicator);
+        }
+        indicator.classList.add('show');
+    }
+
+    hideOfflineIndicator() {
+        const indicator = document.querySelector('.offline-indicator');
+        if (indicator) {
+            indicator.classList.remove('show');
+            setTimeout(() => indicator.remove(), 300);
+        }
+    }
+
+    updateConnectionStatus() {
+        const connection = navigator.connection;
+        let status = document.querySelector('.connection-status');
+        
+        if (!status) {
+            status = document.createElement('div');
+            status.className = 'connection-status';
+            document.body.appendChild(status);
+        }
+
+        status.classList.remove('offline', 'slow');
+        
+        if (!navigator.onLine) {
+            status.textContent = 'Sin conexión';
+            status.classList.add('offline');
+        } else if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+            status.textContent = 'Conexión lenta';
+            status.classList.add('slow');
+        } else {
+            status.style.opacity = '0';
+        }
     }
 
     setViewportHeight() {
@@ -706,3 +880,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for potential external use
 window.iPhoneStoreApp = iPhoneStoreApp;
+
+// Utility function for debouncing
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
